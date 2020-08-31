@@ -1,0 +1,32 @@
+main:
+  namespace: services
+  name: warehouse-two-printer-service
+  description: |
+    A example service for processing warehouse orders. It has an private end-point to upsert orders from the order warehouse service.
+
+    This service is an example of a service that generates documents and print them.
+  deploymentType: Service
+  buildType: netcore
+  integration: none
+  httpPort: 5000
+  clusterPort: 2552
+  team: platform
+  authorization:
+    requiredClaims:
+      azp: applications
+      aud: account
+    mappings:
+      x-avanti-customerId: context.customerId
+      x-avanti-email: email
+environments:
+  staging:
+    replicaCount: 1
+    cpuLimit: 75m
+    memoryLimit: 128Mi
+    vars:
+      AkkaSettings__AkkaClusterDiscoveryResolver: Kubernetes
+      AkkaSettings__MinNumberOfNodesInCluster: 1
+      AuthenticationSettings__BasicAuthenticationPassword: hksdflkjsaflkdkdljflaksdkl
+      Serilog__MinimumLevel__Default: Information
+      RelationalDataStoreSettings__DatabaseName: warehousetwoprinter
+      ProcessorSettings__DelayProcessingOnStartInSeconds: 10
