@@ -7,7 +7,7 @@ This service is an example of a service that generates documents and print them.
 ## Prerequisites
 
 - Windows / Linux / MacOS
-- ASP.NET Core 3.1 Runtime
+- .NET 5 Runtime
 - PostgreSQL 12 or higher
 
 ## Installation
