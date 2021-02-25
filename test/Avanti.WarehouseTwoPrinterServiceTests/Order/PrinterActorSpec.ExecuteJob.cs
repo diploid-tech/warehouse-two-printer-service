@@ -1,10 +1,7 @@
 using System;
 using System.Globalization;
-using System.Text.Json;
 using Akka.Actor;
-using Avanti.Core.RelationalData;
 using Avanti.WarehouseTwoPrinterService.Order;
-using FluentAssertions;
 using Xunit;
 
 namespace Avanti.WarehouseTwoPrinterServiceTests.Order
@@ -13,7 +10,7 @@ namespace Avanti.WarehouseTwoPrinterServiceTests.Order
     {
         public class When_Execute_Job : PrinterActorSpec
         {
-            private PrinterActor.ExecuteJob input = new PrinterActor.ExecuteJob
+            private readonly PrinterActor.ExecuteJob input = new()
             {
                 Id = "1-1",
                 OrderId = 1,

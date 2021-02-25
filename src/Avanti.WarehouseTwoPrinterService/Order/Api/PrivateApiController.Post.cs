@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Avanti.WarehouseTwoPrinterService.Order.Api
@@ -17,8 +16,8 @@ namespace Avanti.WarehouseTwoPrinterService.Order.Api
                     Tags = new[] { "Order" })]
         [HttpPost]
         public async Task<IActionResult> PostOrder([FromBody] PostOrderRequest request) =>
-            await printerActorRef.Ask(
-                mapper.Map<PrinterActor.ExecuteJob>(request)) switch
+            await this.printerActorRef.Ask(
+                this.mapper.Map<PrinterActor.ExecuteJob>(request)) switch
             {
                 PrinterActor.JobCompleted stored => new OkResult(),
                 _ => new StatusCodeResult(StatusCodes.Status500InternalServerError)

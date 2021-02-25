@@ -11,13 +11,13 @@ namespace Avanti.WarehouseTwoPrinterServiceTests.Order.Api
 {
     public partial class PrivateApiControllerSpec : WithSubject<PrivateApiController>
     {
-        private ProgrammableActor<PrinterActor> progPrinterActor;
+        private readonly ProgrammableActor<PrinterActor> progPrinterActor;
 
         private PrivateApiControllerSpec()
         {
-            this.progPrinterActor = Kit.CreateProgrammableActor<PrinterActor>("order-actor");
-            var printerActorProvider = An<IActorProvider<PrinterActor>>();
-            printerActorProvider.Get().Returns(this.progPrinterActor.TestProbe);
+            progPrinterActor = Kit.CreateProgrammableActor<PrinterActor>("order-actor");
+            IActorProvider<PrinterActor> printerActorProvider = An<IActorProvider<PrinterActor>>();
+            printerActorProvider.Get().Returns(progPrinterActor.TestProbe);
 
             var config = new MapperConfiguration(cfg => cfg.AddProfile(new OrderMapping()));
             config.AssertConfigurationIsValid();

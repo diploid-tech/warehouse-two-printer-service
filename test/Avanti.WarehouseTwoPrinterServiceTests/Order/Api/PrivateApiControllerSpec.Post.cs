@@ -14,7 +14,7 @@ namespace Avanti.WarehouseTwoPrinterServiceTests.Order.Api
     {
         public class When_PostOrder_Request_Is_Received : PrivateApiControllerSpec
         {
-            private PrivateApiController.PostOrderRequest request = new PrivateApiController.PostOrderRequest
+            private readonly PrivateApiController.PostOrderRequest request = new()
             {
                 Id = "1-1",
                 OrderId = 1,
@@ -32,7 +32,7 @@ namespace Avanti.WarehouseTwoPrinterServiceTests.Order.Api
                 progPrinterActor.SetResponseForRequest<PrinterActor.ExecuteJob>(request =>
                     new PrinterActor.JobCompleted());
 
-                var result = await Subject.PostOrder(request);
+                IActionResult result = await Subject.PostOrder(request);
 
                 result.Should().BeOfType<OkResult>();
 
@@ -57,7 +57,7 @@ namespace Avanti.WarehouseTwoPrinterServiceTests.Order.Api
                 progPrinterActor.SetResponseForRequest<PrinterActor.ExecuteJob>(request =>
                     new Failure());
 
-                var result = await Subject.PostOrder(request);
+                IActionResult result = await Subject.PostOrder(request);
 
                 result.Should().BeOfType<StatusCodeResult>()
                     .Which.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);

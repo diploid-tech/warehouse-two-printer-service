@@ -10,7 +10,7 @@ namespace Avanti.WarehouseTwoPrinterService.Order
 
         public PrinterActor()
         {
-            Receive<ExecuteJob>(m => Sender.Tell(Handle(m)));
+            Receive<ExecuteJob>(m => this.Sender.Tell(Handle(m)));
         }
 
         private IResponse Handle(ExecuteJob m)
