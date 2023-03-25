@@ -1,7 +1,6 @@
 using Avanti.Core.Microservice.Settings;
 
-namespace Avanti.WarehouseTwoPrinterService
-{
-    public class ServiceSettings : Validatable
-    { }
-}
+namespace Avanti.WarehouseTwoPrinterService;
+
+public class ServiceSettings : IValidatable
+{ }

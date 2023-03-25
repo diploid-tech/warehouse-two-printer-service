@@ -7,25 +7,24 @@ using Avanti.WarehouseTwoPrinterService.Order.Mappings;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 
-namespace Avanti.WarehouseTwoPrinterServiceTests.Order.Api
+namespace Avanti.WarehouseTwoPrinterServiceTests.Order.Api;
+
+public partial class PrivateApiControllerSpec : WithSubject<PrivateApiController>
 {
-    public partial class PrivateApiControllerSpec : WithSubject<PrivateApiController>
+    private readonly ProgrammableActor<PrinterActor> progPrinterActor;
+
+    private PrivateApiControllerSpec()
     {
-        private readonly ProgrammableActor<PrinterActor> progPrinterActor;
+        progPrinterActor = Kit.CreateProgrammableActor<PrinterActor>("order-actor");
+        IActorProvider<PrinterActor> printerActorProvider = An<IActorProvider<PrinterActor>>();
+        printerActorProvider.Get().Returns(progPrinterActor.TestProbe);
 
-        private PrivateApiControllerSpec()
-        {
-            progPrinterActor = Kit.CreateProgrammableActor<PrinterActor>("order-actor");
-            IActorProvider<PrinterActor> printerActorProvider = An<IActorProvider<PrinterActor>>();
-            printerActorProvider.Get().Returns(progPrinterActor.TestProbe);
+        var config = new MapperConfiguration(cfg => cfg.AddProfile(new OrderMapping()));
+        config.AssertConfigurationIsValid();
 
-            var config = new MapperConfiguration(cfg => cfg.AddProfile(new OrderMapping()));
-            config.AssertConfigurationIsValid();
-
-            Subject = new PrivateApiController(
-                printerActorProvider,
-                An<ILogger<PrivateApiController>>(),
-                config.CreateMapper());
-        }
+        Subject = new PrivateApiController(
+            printerActorProvider,
+            An<ILogger<PrivateApiController>>(),
+            config.CreateMapper());
     }
 }
